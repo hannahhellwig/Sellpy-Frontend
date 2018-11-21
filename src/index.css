@@ -23,3 +23,29 @@ body {
 .active + .button {
   background: black;
 }
+
+/*-------------MoreInfo--------------*/
+
+/* .titleContainerStyle = {
+  display: flex;
+}
+.titleStyle = {
+  background-color: #fff;
+  border: 1px solid pink;
+  width: 33.33%;
+  padding: 5px;
+}
+.titleStyleActive = {
+  background-color: pink;
+  border: 1px solid pink;
+  width: 33.33%;
+  padding: 5px;
+}
+.contentStyle = {
+  display: block;
+  border: 1px solid pink;
+  padding: 5px;
+}
+.activeStyle = {
+  display: block;
+} */

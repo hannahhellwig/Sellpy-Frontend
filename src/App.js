@@ -6,6 +6,27 @@ const columnStyle = {
   minWidth: '300px'
 }
 
+// const Header = ({item}) => {
+//   const style = {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     flexWrap: 'wrap',
+//     alignItems: 'center',
+//     paddingBottom: '40px'
+//   }
+//   const imageStyle = {
+//     width: '100%',
+//     paddingBottom: '10px'
+//   }
+//   return <div style={style}>
+//     <img
+//       style={imageStyle}
+//       src="../sellpy-header.png"
+//       alt="header" />
+//     {item.traderaCategoryId}
+//   </div>
+// }
+
 const ImageContainer = ({images}) => {
   const imageStyle = {
     width: '100%'
@@ -21,18 +42,76 @@ const ImageContainer = ({images}) => {
   </div>
 }
 
+const MoreInfo = ({item}, props ) => {
+  const style = {
+    width: '100%',
+    margin: '40px 0 0 0'
+  }
+  const titleContainerStyle = {
+    display: 'flex'
+  }
+  const titleStyle = {
+    backgroundColor: '#fff',
+    border: '1px solid pink',
+    width: '33.33%',
+    padding: '5px',
+  }
+  const titleStyleActive = {
+    backgroundColor: 'pink',
+    border: '1px solid pink',
+    width: '33.33%',
+    padding: '5px',
+  }
+  const contentStyle = {
+    display: 'block',
+    border: '1px solid pink',
+    padding: '5px',
+  }
+  const activeStyle = {
+    display: 'block'
+  }
+  return <div
+    style={style}
+  >
+    <div style={titleContainerStyle}>
+      <div
+        style={titleStyleActive}
+        onClick={this.toggleStyle} >
+        <h5>Productinformation</h5>
+      </div>
+      <div
+        style={titleStyle}
+        onClick={this.toggleStyle} >
+        <h5>Frakt & Retur</h5>
+      </div>
+      <div
+        style={titleStyle}
+        onClick={this.toggleStyle} >
+        <h5>Ge feedback på annons</h5>
+      </div>
+    </div>
+    <div style={props.activeStyle ? activeStyle:contentStyle}>
+      <p>Märke: {item.metadata.brand}</p>
+      <p>Typ: {item.metadata.type}</p>
+      <p>Storlek: {item.metadata.size}</p>
+      <p>Modell: {item.metadata.model}</p>
+      <p>Färg: {item.metadata.color[0]}</p>
+      <p>Sparat vatten: 2500 liter</p>
+    </div>
+  </div>
+}
 
-const Button = (props) => {
-  console.log('button', props.activeClass)
+const Button = ({ activeClass, toggleButtonClass, title }) => {
+  console.log('button', activeClass)
   return <div
   >
-    <button className={props.activeClass ? 'active':'button'} onClick={props.toggleButtonClass}>
-      {props.title}
+    <button className={activeClass ? 'active':'button'} onClick={toggleButtonClass}>
+      {title}
     </button>
   </div>
 }
 
-const ItemInfo = ({item}, props) => {
+const ItemInfo = ({ item, activeClass, toggleButtonClass }) => {
   const style = {
     ...columnStyle,
     display: 'flex',
@@ -45,28 +124,30 @@ const ItemInfo = ({item}, props) => {
     <p>{item.metadata.type}</p>
     <p>{item.currentValue}</p>
     <Button title='Lägg i varukorgen'
-      activeClass={props.activeClass}
-      toggleButtonClass={props.toggleButtonClass}
+      activeClass={activeClass}
+      toggleButtonClass={toggleButtonClass}
     />
+    <MoreInfo
+      item={item} />
   </div>
 }
 
-const ItemDetailPage = ({item}, props) => {
-  console.log('hej', props.active)
+const ItemDetailPage = ({ item, activeClass, toggleButtonClass }) => {
   const style = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around'
   }
   return <div>
+    {/* <Header item={item}/>*/}
     <div style={style}>
       <ImageContainer
         images={item.images}
       />
       <ItemInfo
         item={item}
-        activeClass={props.activeClass}
-        toggleButtonClass={props.toggleButtonClass}
+        activeClass={activeClass}
+        toggleButtonClass={toggleButtonClass}
       />
     </div>
   </div>
