@@ -21,7 +21,17 @@ const ImageContainer = ({images}) => {
   </div>
 }
 
-const ItemInfo = ({item}) => {
+const Button = (props) => {
+  console.log('button', props.activeClass)
+  return <div
+  >
+    <button className={props.activeClass ? 'active':'button'} onClick={props.toggleButtonClass}>
+      {props.title}
+    </button>
+  </div>
+}
+
+const ItemInfo = ({item}, props) => {
   const style = {
     ...columnStyle,
     display: 'flex',
@@ -30,32 +40,55 @@ const ItemInfo = ({item}) => {
   return <div
     style={style}
   >
-    <p>{item.metadata.brand}</p>
+    <h2>{item.metadata.brand}</h2>
     <p>{item.metadata.type}</p>
     <p>{item.currentValue}</p>
+    <Button title='Lägg i varukorgen'
+      activeClass={props.activeClass}
+      toggleButtonClass={props.toggleButtonClass}
+    />
   </div>
 }
 
-const ItemDetailPage = ({item}) => {
+const ItemDetailPage = ({item}, props) => {
+  console.log('hej', props.active)
   const style = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around'
   }
-  return <div style={style}>
-    <ImageContainer
-      images={item.images}
-    />
-    <ItemInfo
-      item={item}
-    />
+  return <div>
+    <div style={style}>
+      <ImageContainer
+        images={item.images}
+      />
+      <ItemInfo
+        item={item}
+        activeClass={props.activeClass}
+        toggleButtonClass={props.toggleButtonClass}
+      />
+    </div>
   </div>
 }
 
 class App extends Component {
+  constructor(props) {
+        super(props)
+        this.state = {
+            activeClass: false
+        }
+        console.log(this.state.activeClass)
+    }
+    toggleButtonClass = () => {
+        const currentState = this.state.active
+        this.setState({ active: !currentState })
+    }
+
   render () {
     return <ItemDetailPage
       item={shirt}
+      activeClass={this.state.activeClass}
+      toggleButtonClass={this.toggleButtonClass}
     />
   }
 }
