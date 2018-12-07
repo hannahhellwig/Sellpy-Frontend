@@ -1,35 +1,45 @@
 import React, {Component} from 'react'
 import {shirt} from './resources/items'
+import {categories} from './resources/TraderaCategories'
 
 const columnStyle = {
   flexBasis: '40%',
   minWidth: '300px'
 }
 
-// const Header = ({item}) => {
-//   const style = {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     flexWrap: 'wrap',
-//     alignItems: 'center',
-//     paddingBottom: '40px'
-//   }
-//   const imageStyle = {
-//     width: '100%',
-//     paddingBottom: '10px'
-//   }
-//   return <div style={style}>
-//     <img
-//       style={imageStyle}
-//       src="../sellpy-header.png"
-//       alt="header" />
-//     {item.traderaCategoryId}
-//   </div>
-// }
+const Header = ({ item, categories }) => {
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    paddingBottom: '40px'
+  }
+  const imageStyle = {
+    width: '100%',
+    paddingBottom: '10px'
+  }
+
+  const breadcrumbStyle = {
+    marginLeft: '10px',
+    fontSize: '14px',
+    color: '#adadad'
+  }
+
+  return <div style={style}>
+    <img
+      style={imageStyle}
+      src="../sellpy-header.png"
+      alt="header" />
+    <div style={breadcrumbStyle}>
+      {categories[item.traderaCategoryId]}
+    </div>
+  </div>
+}
 
 const ImageContainer = ({images}) => {
   const imageStyle = {
-    width: '100%'
+    width: '100%',
+    margin: '0 0 20px'
   }
   return <div
     style={columnStyle}
@@ -42,135 +52,165 @@ const ImageContainer = ({images}) => {
   </div>
 }
 
-const MoreInfo = ({item}, props ) => {
-  const style = {
-    width: '100%',
-    margin: '40px 0 0 0'
-  }
-  const titleContainerStyle = {
-    display: 'flex'
-  }
-  const titleStyle = {
-    backgroundColor: '#fff',
-    border: '1px solid pink',
-    width: '33.33%',
-    padding: '5px',
-  }
-  const titleStyleActive = {
-    backgroundColor: 'pink',
-    border: '1px solid pink',
-    width: '33.33%',
-    padding: '5px',
-  }
-  const contentStyle = {
-    display: 'block',
-    border: '1px solid pink',
-    padding: '5px',
-  }
-  const activeStyle = {
-    display: 'block'
-  }
-  return <div
-    style={style}
-  >
-    <div style={titleContainerStyle}>
-      <div
-        style={titleStyleActive}
-        onClick={this.toggleStyle} >
-        <h5>Productinformation</h5>
+class AccordionItem extends Component {
+  constructor(props) {
+        super(props)
+        this.state = {
+            activeAccordionClass: false
+        }
+    }
+    toggleAccordionClass = () => {
+        const currentState = this.state.activeAccordionClass
+        this.setState({ activeAccordionClass: !currentState })
+    }
+
+  render () {
+    return (
+      <div className='accordionItem'>
+        <div
+          className={this.state.activeAccordionClass ? 'activeAccordionTitle':'accordionTitle'}
+          onClick={this.toggleAccordionClass} >
+          <h4>{this.props.title}</h4>
+        </div>
+        <div className={this.state.activeAccordionClass ? 'activeAccordionContent':'accordionContent'}>
+          <div className='contentCollumn'>
+            <p>Märke:</p>
+            <p>Typ:</p>
+            <p>Storlek:</p>
+            <p>Modell:</p>
+            <p>Färg:</p>
+            <a href='https://sustainability.sellpy.se/100miljonerliter/'>	💧 Sparat vatten:</a>
+          </div>
+          <div className='contentCollumn'>
+            <p>{this.props.item.metadata.brand}</p>
+            <p>{this.props.item.metadata.type}</p>
+            <p>{this.props.item.metadata.size}</p>
+            <p>{this.props.item.metadata.model}</p>
+            <p>{this.props.item.metadata.color[0]}</p>
+            <p>2500 liter</p>
+          </div>
+        </div>
       </div>
-      <div
-        style={titleStyle}
-        onClick={this.toggleStyle} >
-        <h5>Frakt & Retur</h5>
-      </div>
-      <div
-        style={titleStyle}
-        onClick={this.toggleStyle} >
-        <h5>Ge feedback på annons</h5>
-      </div>
-    </div>
-    <div style={props.activeStyle ? activeStyle:contentStyle}>
-      <p>Märke: {item.metadata.brand}</p>
-      <p>Typ: {item.metadata.type}</p>
-      <p>Storlek: {item.metadata.size}</p>
-      <p>Modell: {item.metadata.model}</p>
-      <p>Färg: {item.metadata.color[0]}</p>
-      <p>Sparat vatten: 2500 liter</p>
-    </div>
-  </div>
+  )}
 }
 
-const Button = ({ activeClass, toggleButtonClass, title }) => {
-  console.log('button', activeClass)
-  return <div
-  >
-    <button className={activeClass ? 'active':'button'} onClick={toggleButtonClass}>
-      {title}
-    </button>
-  </div>
+class Accordion extends Component {
+
+  render () {
+    return <div className='accordion'>
+    <AccordionItem
+      item={this.props.item}
+      title='Productinformation' />
+    <AccordionItem
+      item={this.props.item}
+      title='Frakt & Retur' />
+    <AccordionItem
+      item={this.props.item}
+      title='Ge feedback på annons' />
+      </div>
+  }
 }
 
-const ItemInfo = ({ item, activeClass, toggleButtonClass }) => {
+
+class Button extends Component {
+  constructor(props) {
+        super(props)
+        this.state = {
+            active: false
+        }
+    }
+  toggleButton = () => {
+      const currentState = this.state.active
+      this.setState({ active: !currentState })
+  }
+  render () {
+    return <div className='buttonContainer'>
+      <button
+        className={this.state.active ? this.props.activeButtonClass : this.props.buttonClass}
+        onClick={this.toggleButton}>
+        {this.state.active ? this.props.activeTitle : this.props.title}
+      </button>
+    </div>
+  }
+}
+
+const ItemInfo = ({ item }) => {
   const style = {
     ...columnStyle,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    padding: '0',
+    boxSizing: 'border-box',
+  }
+  const buttonContainerStyle = {
+    display: 'flex',
+    flexFlow: 'row wrap',
+  }
+
+  const linkStyle = {
+    fontSize: '12px',
+    margin: '5px 15px 5px 0',
   }
   return <div
     style={style}
   >
-    <h2>{item.metadata.brand}</h2>
-    <p>{item.metadata.type}</p>
-    <p>{item.currentValue}</p>
-    <Button title='Lägg i varukorgen'
-      activeClass={activeClass}
-      toggleButtonClass={toggleButtonClass}
-    />
-    <MoreInfo
+    <h1>{item.metadata.brand}</h1>
+    <h2>{item.currentValue} kr</h2>
+    <div style={buttonContainerStyle}>
+      <Button
+        title='Lägg i varukorgen'
+        activeTitle='Ta bort'
+        buttonClass={'button'}
+        activeButtonClass={'active'}
+      />
+      <Button
+        title='Favorit &#x2661;'
+        activeTitle='Favorit &#x2665;'
+        buttonClass={'buttonFavorite'}
+        activeButtonClass={'buttonFavorite'}
+      />
+    </div>
+    <Accordion
       item={item} />
+    <div style={buttonContainerStyle}>
+      <a style={linkStyle} href='https://www.sellpy.se/store/brand/Polo%20Ralph%20Lauren'>
+        {item.metadata.brand} &#x226B;
+      </a>
+      <a style={linkStyle} href='https://www.sellpy.se/store/type/Skjorta'>
+        {item.metadata.type} &#x226B;
+      </a>
+      <a style={linkStyle} href='https://www.sellpy.se/search?refinementList%5Buser%5D=Kw4PPAotLa'>
+        Samma Säljare &#x226B;
+      </a>
+    </div>
   </div>
 }
 
-const ItemDetailPage = ({ item, activeClass, toggleButtonClass }) => {
+const ItemDetailPage = ({ item, categories }) => {
   const style = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around'
   }
   return <div>
-    {/* <Header item={item}/>*/}
+    <Header
+      item={item}
+      categories={categories} />
     <div style={style}>
       <ImageContainer
-        images={item.images}
-      />
+        images={item.images} />
       <ItemInfo
-        item={item}
-        activeClass={activeClass}
-        toggleButtonClass={toggleButtonClass}
-      />
+        item={item} />
     </div>
   </div>
 }
 
 class App extends Component {
-  constructor(props) {
-        super(props)
-        this.state = {
-            activeClass: false
-        }
-        console.log(this.state.activeClass)
-    }
-    toggleButtonClass = () => {
-        const currentState = this.state.active
-        this.setState({ active: !currentState })
-    }
 
   render () {
     return <ItemDetailPage
       item={shirt}
-      activeClass={this.state.activeClass}
-      toggleButtonClass={this.toggleButtonClass}
+      categories={categories}
     />
   }
 }
