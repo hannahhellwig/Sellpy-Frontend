@@ -16,7 +16,7 @@ We would <b>highly recommend</b> that your design is <b>different</b> to the exi
 
 #### The following guidlines apply:
 
-- The mobile view is just as important as the desktop view.
+- The mobile view is more important as the desktop view :)
 - Think about what you would like to add to make the page more appealing. Ex: At the moment we have a component displaying similar items.
 - The main color of Sellpy is (#008BE5)
 - Information about the 3 item examples presented above are present in the items.js file in the "resources" folder.
